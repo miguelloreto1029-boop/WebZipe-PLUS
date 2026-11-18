@@ -1,7 +1,7 @@
 {
   "name": "Camello · Servicios a domicilio",
   "short_name": "Camello",
-  "description": "Pide un cerrajero, plomero, electricista y más, con el precio a la vista y seguimiento en vivo.",
+  "description": "Demo de plataforma de servicios a domicilio.",
   "lang": "es-CO",
   "dir": "ltr",
   "start_url": "./",
@@ -11,10 +11,35 @@
   "orientation": "portrait",
   "background_color": "#f5efe8",
   "theme_color": "#f5efe8",
-  "categories": ["lifestyle", "utilities", "business"],
+  "categories": [
+    "lifestyle",
+    "utilities",
+    "business"
+  ],
   "icons": [
-    { "src": "icons/icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icono-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "./icons/icono-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icono-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icono-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
   ]
 }
