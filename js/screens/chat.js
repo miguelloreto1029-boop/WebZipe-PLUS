@@ -65,19 +65,31 @@ export function pantallaChat(raiz, { id }) {
     pie.querySelectorAll('[data-rapida]').forEach((b) => b.addEventListener('click', () => enviar(b.dataset.rapida)));
   }
 
+  let mostrados = window.CamelloOpt.config.pagina;
   function pintar() {
     const mensajes = chat.mensajes(id);
-    lista.innerHTML = mensajes.length
-      ? mensajes
-          .map((m) => {
-            const mio = m.rol === miRol;
-            return `<li class="msg ${mio ? 'mio' : 'suyo'}">
-              ${mio ? '' : avatar(otro, 28)}
-              <span class="burbuja">${esc(m.texto)}<time>${hora(m.fecha)}</time></span>
-            </li>`;
-          })
-          .join('')
-      : `<li class="chat-vacio">${avatar(otro, 56)}<p>${soyMaestro ? `Escríbele a ${esc(otro.nombre)} si necesitas una indicación para llegar.` : `Escríbele a ${esc(otro.nombre)} si necesitas darle una indicación.`}</p></li>`;
+    // Los mensajes se paginan: se empieza por los últimos y se cargan más al pedir
+    const visibles = mensajes.slice(-mostrados);
+    const antes = mensajes.length - visibles.length;
+    lista.innerHTML =
+      (antes
+        ? `<li class="ver-mas"><button class="btn btn-secundario btn-bloque">Cargar mensajes anteriores (${antes})</button></li>`
+        : '') +
+      (visibles.length
+        ? visibles
+            .map((m) => {
+              const mio = m.rol === miRol;
+              return `<li class="msg ${mio ? 'mio' : 'suyo'}">
+                ${mio ? '' : avatar(otro, 28)}
+                <span class="burbuja">${esc(m.texto)}<time>${hora(m.fecha)}</time></span>
+              </li>`;
+            })
+            .join('')
+        : `<li class="chat-vacio">${avatar(otro, 56)}<p>${soyMaestro ? `Escríbele a ${esc(otro.nombre)} si necesitas una indicación para llegar.` : `Escríbele a ${esc(otro.nombre)} si necesitas darle una indicación.`}</p></li>`);
+    lista.querySelector('.ver-mas button')?.addEventListener('click', () => {
+      mostrados += window.CamelloOpt.config.pagina;
+      pintar();
+    });
     lista.lastElementChild?.scrollIntoView({ block: 'end' });
     chat.marcarVisto(id, miRol);
     pintarPie();

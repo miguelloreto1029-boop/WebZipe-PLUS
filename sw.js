@@ -3,7 +3,7 @@
  * Guarda la app en caché para que abra rápido y funcione sin conexión.
  * Al publicar cambios, sube el número de VERSION para que todos reciban la nueva.
  */
-const VERSION = 'camello-pruebas-3';
+const VERSION = 'camello-pruebas-8';
 
 const ARCHIVOS = [
   './',
@@ -14,6 +14,7 @@ const ARCHIVOS = [
   './css/bento.css',
   './css/cristal.css',
   './css/interruptor.css',
+  './css/movil.css',
   './css/motion.css',
   './fuentes/ApfelGrotezk-Regular.woff2',
   './fuentes/ApfelGrotezk-Mittel.woff2',
@@ -38,6 +39,7 @@ const ARCHIVOS = [
   './js/demo.js',
   './js/estado.js',
   './js/interruptor.js',
+  './js/AppOptimizer.js',
   './js/instalar.js',
   './js/tema.js',
   './js/main.js',

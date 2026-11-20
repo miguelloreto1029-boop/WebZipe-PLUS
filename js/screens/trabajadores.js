@@ -29,6 +29,7 @@ export async function pantallaTrabajadores(raiz) {
   const opciones = () => ({ urgente, desde: b.direccion?.coords, ciudad: b.direccion?.ciudad || sesion.usuario?.ciudad || '' });
   let orden = 'cercano';
   let lista = [];
+  let mostrados = 0;
 
   raiz.innerHTML = `
     ${barra(`${cat.plural} disponibles`)}
@@ -53,6 +54,7 @@ export async function pantallaTrabajadores(raiz) {
     const bloqueados = sesion.usuario.bloqueados || [];
     const visibles = lista.filter((t) => !bloqueados.includes(t.id));
     if (!visibles.length) {
+      mostrados = 0;
       ul.innerHTML = `<li>${vacio({
         icono: 'buscar',
         titulo: `No hay ${cat.plural.toLowerCase()} conectados ahora${ciudadPorId(opciones().ciudad) ? ` en ${ciudadPorId(opciones().ciudad).nombre}` : ''}`,
@@ -62,7 +64,12 @@ export async function pantallaTrabajadores(raiz) {
     }
     // Los maestros conectados ahora mismo van primero
     const ordenada = [...visibles].sort((x, y) => (y.enLinea ? 1 : 0) - (x.enLinea ? 1 : 0) || ORDENES[orden].fn(x, y));
+    // Se página de a bloques: no se vuelcan cien tarjetas de una sola vez
+    const opt = window.CamelloOpt;
+    if (!mostrados) mostrados = opt.config.pagina;
+    const hasta = Math.min(ordenada.length, mostrados);
     ul.innerHTML = ordenada
+      .slice(0, hasta)
       .map(
         (t) => `
       <li>
@@ -79,6 +86,13 @@ export async function pantallaTrabajadores(raiz) {
       </li>`
       )
       .join('');
+    if (hasta < ordenada.length) {
+      ul.insertAdjacentHTML('beforeend', `<li class="ver-mas"><button class="btn btn-secundario btn-bloque">Ver más maestros (${ordenada.length - hasta})</button></li>`);
+      ul.querySelector('.ver-mas button').addEventListener('click', () => {
+        mostrados = hasta + opt.config.pagina;
+        pintar();
+      });
+    }
   };
 
   raiz.querySelectorAll('[data-orden]').forEach((c) =>
@@ -97,6 +111,7 @@ export async function pantallaTrabajadores(raiz) {
     ul.innerHTML = esqueletoTarjetas(4);
     try {
       lista = await trabajadores.disponibles(b.categoria, opciones());
+      mostrados = 0;
       if (ul.isConnected) pintar();
     } catch (err) {
       ul.innerHTML = `<li>${errorVista(err.message)}</li>`;
@@ -111,15 +126,18 @@ export async function pantallaTrabajadores(raiz) {
     lista = trabajadores.disponiblesLocal(b.categoria, opciones()).filter((t) => ids.has(t.id) || Date.now() - (t.visto || 0) < 60000);
     if (ul.isConnected) pintar();
   });
-  // Cada 15 s se pregunta otra vez al servidor por si alguien se conectó
+  // Cada tanto se pregunta otra vez al servidor por si alguien se conectó.
+  // En el teléfono se espacia más y se salta si la pestaña está guardada.
+  const opt = window.CamelloOpt;
   const reloj = setInterval(async () => {
+    if (opt.oculto()) return;
     try {
       lista = await trabajadores.disponibles(b.categoria, opciones());
       if (ul.isConnected) pintar();
     } catch {
       /* sin señal: se deja la lista como está */
     }
-  }, 15000);
+  }, opt.config.sondeoMs);
   return () => {
     dejar();
     clearInterval(reloj);

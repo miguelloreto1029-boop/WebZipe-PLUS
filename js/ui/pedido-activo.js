@@ -22,18 +22,25 @@ function texto(pedido) {
 /** Pinta el aviso dentro de `contenedor` y lo mantiene actualizado. Devuelve la función de limpieza. */
 export function montarPedidoActivo(contenedor) {
   if (!contenedor || !sesion.usuario) return () => {};
+  const opt = window.CamelloOpt;
+
+  // Solo se toca el DOM cuando algo visible cambió: reconstruir el aviso cada
+  // segundo era lo que trababa el teléfono.
+  let firma = '';
 
   const pintar = () => {
     const p = pedidos.activoDe(sesion.usuario.id);
     if (!p) {
-      contenedor.innerHTML = '';
+      if (firma === '') return;
+      firma = '';
+      opt.pintarSiCambia(contenedor, '');
       return;
     }
     const t = texto(p);
     const cat = categoriaPorId(p.categoria);
     const e = estadoDe(p);
     const progreso = e.id === 'agendado' ? 0 : Math.min(1, (e.indice + e.avance) / (ESTADOS.length - 1));
-    contenedor.innerHTML = `
+    const html = `
       <a class="activo-aviso" href="${t.ruta}">
         ${iconoCategoria(cat, 40)}
         <span class="activo-texto">
@@ -43,9 +50,18 @@ export function montarPedidoActivo(contenedor) {
         ${icono('derecha', { tamano: 20 })}
         <span class="activo-progreso" style="--p:${(progreso * 100).toFixed(1)}%"></span>
       </a>`;
+    const nueva = `${p.id}|${t.titulo}|${t.sub}|${(progreso * 100).toFixed(1)}`;
+    if (nueva === firma) return;
+    firma = nueva;
+    opt.pintarSiCambia(contenedor, html);
   };
 
   pintar();
-  const intervalo = setInterval(pintar, 1000);
-  return () => clearInterval(intervalo);
+  const intervalo = setInterval(pintar, opt.config.vivoMs);
+  // Cuando el pedido cambia (el maestro avanzó, un mensaje nuevo) se repinta ya
+  const dejar = pedidos.escuchar(pintar);
+  return () => {
+    clearInterval(intervalo);
+    dejar();
+  };
 }

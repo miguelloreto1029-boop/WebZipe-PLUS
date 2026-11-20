@@ -233,7 +233,13 @@ export function pantallaSeguimiento(raiz, { id }) {
   }
 
   pintar();
-  const reloj = setInterval(pintar, 1000);
+  // El repintado periódico solo cubre el tiempo que pasa (el maestro avanza,
+  // adivinar la llegada); los cambios reales llegan por los escuchas de abajo.
+  const opt = window.CamelloOpt;
+  const reloj = setInterval(() => {
+    if (opt.oculto()) return;
+    pintar();
+  }, opt.config.vivoMs);
   // Cambios que hace el maestro desde su app y mensajes nuevos se ven al instante
   const dejar = pedidos.escuchar(pintar);
   const dejarChat = chat.escuchar(id, pintar);

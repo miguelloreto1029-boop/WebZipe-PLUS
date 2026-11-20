@@ -1,324 +1,67 @@
-# Camello · demo
+# Camello · app única de prueba
 
-**Camello** (*"te hacemos el camello"*) es una app de servicios a domicilio bajo demanda:
-la persona pide un cerrajero, plomero, electricista, pintor, carpintero, limpieza o técnico
-de electrodomésticos, ve los maestros disponibles cerca con su precio y sigue el servicio
-hasta pagar y calificar.
+Una sola app con las **tres interfaces** de la prueba: cristal líquido,
+brutalista y bento. Se cambia entre ellas con el botón flotante (el icono de
+rodillo) sin recargar y sin tocar los datos.
 
-Toma como referencia las funciones de las apps de movilidad bajo demanda (inicio con mapa,
-billetera, cupones, ofrece tu precio, centro de seguridad, chat, propina, invitar amigos),
-con marca, diseño y textos propios.
+Entra con la cuenta de ejemplo (**Marta Ruiz**) y los datos de muestra:
+pedidos, cupones, maestros, lugares y chat. No necesita servidor ni internet.
 
-Este demo muestra solo la parte del **consumidor**. Los maestros, precios y reseñas
-son datos de ejemplo y el pago es simulado.
+## Las tres interfaces
 
-**Demo en línea:** https://webzipe7-byte.github.io/WebZipe/camello/
-
----
-
-## Tecnología
-
-- **PWA** (aplicación web instalable): una sola base de código para Android, iOS,
-  Windows, macOS y Linux.
-- JavaScript moderno (módulos ES), HTML y CSS. **Sin dependencias ni compilación**:
-  se sube tal cual a cualquier hosting estático.
-- Service worker para abrir rápido y funcionar sin conexión.
-- Los datos se guardan en el navegador (`localStorage`) mientras no haya servidor.
-
-## Cómo ejecutarlo en tu computador
-
-La app necesita servirse desde un servidor (no funciona abriendo el `index.html`
-con doble clic, porque los módulos y el service worker lo exigen).
-
-1. Descarga o clona el repositorio.
-2. Abre una terminal en la carpeta del repositorio.
-3. Inicia un servidor local con cualquiera de estas opciones:
-   - Python: `python -m http.server 8080`
-   - Node: `npx serve .`
-   - VS Code: extensión **Live Server** → clic derecho en `index.html` → *Open with Live Server*.
-4. Abre `http://localhost:8080/camello/` en el navegador.
-
-Para verla como celular en el computador: `F12` → ícono de dispositivo móvil.
-
-## Cómo instalarla
-
-La app debe estar publicada con **https** (GitHub Pages ya lo tiene) o abierta en `localhost`.
-
-| Plataforma | Navegador | Pasos |
-|---|---|---|
-| **Android** | Chrome | Abre el enlace → menú ⋮ → **Instalar app** (o el aviso "Agregar a la pantalla principal"). |
-| **iPhone / iPad** | Safari | Abre el enlace → botón **Compartir** → **Agregar a inicio** → **Agregar**. |
-| **Windows** | Chrome o Edge | Abre el enlace → ícono de instalar en la barra de direcciones (o menú → **Instalar Camello**). Queda en el menú Inicio. |
-| **macOS** | Chrome o Edge | Igual que en Windows; queda en Aplicaciones y el Dock. En Safari 17+: **Archivo → Agregar al Dock**. |
-| **Linux** | Chrome, Chromium o Edge | Ícono de instalar en la barra de direcciones; queda en el menú de aplicaciones. |
-
-Dentro de la app, en **Perfil**, aparece el botón **Instalar** cuando el navegador lo permite.
-
-### Publicarla en las tiendas (más adelante)
-
-- **Google Play**: empaquetar la PWA como TWA con [PWABuilder](https://www.pwabuilder.com) o Bubblewrap.
-- **App Store**: envolverla con [Capacitor](https://capacitorjs.com) y compilar en Xcode.
-- **Microsoft Store**: PWABuilder genera el paquete directamente.
-
-No hace falta reescribir el código para ninguna de las tres.
-
-## Funciones
-
-| Sección | Qué incluye |
+| Nombre | Qué se ve |
 |---|---|
-| **Inicio** | Mapa con tu ubicación, buscador ("se dañó la chapa"), Casa y Trabajo, 7 servicios, Programar, promoción y "Volver a pedir". |
-| **Solicitud** | 3 pasos (qué pasó, dónde, cuándo), urgente o programado. |
-| **Maestros** | Lista con calificación, trabajos, distancia, llegada y precio; orden por cercanía, calificación o precio; filtro **Solo maestras**. |
-| **Confirmar** | Desglose del precio, **Ofrece tu precio**, cupón que se aplica solo y método de pago de la billetera. |
-| **Seguimiento** | 5 estados, mapa ilustrado, **código de seguridad**, chat con el maestro, compartir seguimiento y **centro de seguridad** (emergencias 123, contactos de confianza, reportar). |
-| **Cierre** | Pago con **propina**, recibo y calificación con opción de **no volver a asignarme** a ese maestro. |
-| **Pedidos** | Historial con estado y detalle de cada servicio. |
-| **Billetera** | Tarjetas (validadas con Luhn), Nequi, efectivo, método predeterminado, cupones y pagos realizados. |
-| **Cuenta** | Perfil, Seguridad, Cupones, Invita y gana, Mis lugares, Ayuda, Configuración, Trabaja con Camello, Descargar la app. |
+| **Cristal líquido** | Vidrio esmerilado sobre ámbar profundo, con formas que respiran |
+| **Brutalista** | Cajas duras, borde negro, sombras planas, tipografía enorme |
+| **Bento** | Retícula de celdas de colores sobre contenedor oscuro |
 
-Códigos de cupón para probar: `BIENVENIDO` (viene con la cuenta), `CAMELLO10`, `HOGAR5000`.
-Tarjeta de prueba: `4242 4242 4242 4242`, cualquier fecha futura y CVV de 3 números.
-
-## Cómo probar el demo
-
-1. **Crear cuenta** con cualquier correo (los datos solo quedan en ese navegador).
-2. Elegir un servicio o escribir en el buscador, por ejemplo "se dañó la chapa".
-3. Seguir los 3 pasos: qué pasó, dirección y cuándo.
-4. Elegir un maestro, revisar el precio y **Confirmar solicitud**.
-5. El pedido avanza solo: buscando → aceptado → en camino → en proceso → finalizado
-   (unos 45 segundos en total).
-6. Pagar (simulado) y calificar.
-
-Si programas el servicio para otro día, en el seguimiento aparece el enlace
-*"simular que ya es la hora"* para no tener que esperar.
-
-Para empezar de cero: herramientas del navegador → *Application* → *Storage* → *Clear site data*.
+La elección se guarda en el navegador (`localStorage`), así que al volver a
+abrir la app se mantiene la interfaz elegida.
 
 ## Estructura
 
 ```
-camello/
-├── index.html              Punto de entrada
-├── manifest.webmanifest    Datos de instalación (nombre, íconos, colores)
-├── sw.js                   Service worker (caché y modo sin conexión)
-├── icons/                  Íconos de la app
-├── css/app.css             Estilos
-└── js/
-    ├── main.js             Rutas y arranque
-    ├── config.js           Ciudad, moneda, recargo, tiempos de la simulación, métodos de pago
-    ├── router.js           Navegación por #/ruta
-    ├── estado.js           Sesión y borrador de la solicitud
-    ├── instalar.js         Botón de instalar la PWA
-    ├── data/               Datos de ejemplo (categorías y maestros)
-    ├── services/           Lógica y acceso a datos (auth, pedidos, pagos, trabajadores…)
-    ├── ui/                 Componentes reutilizables (íconos, mapa, tarjetas, formatos)
-    └── screens/            Una pantalla por archivo
+index.html            Tres hojas de identidad cargadas, una activa
+css/app.css           Estilos base (estructura y componentes)
+css/motion.css        Animaciones
+css/cristal.css  }
+css/brutal.css   }    Las tres identidades visuales
+css/bento.css    }
+css/interruptor.css   Botón y hoja de cambio de interfaz
+css/movil.css          Optimización automática (solo actúa en táctil)
+js/AppOptimizer.js     Núcleo: detecta el dispositivo y da las utilidades
+js/tema.js            Deja activa la interfaz guardada antes de pintar
+js/interruptor.js     El botón y la hoja de selección
+js/...                La app (backend y lógica reales)
 ```
 
-## Preparado para crecer
+## Optimización y detección de dispositivo
 
-Las pantallas nunca leen datos directamente: todo pasa por `js/services/`.
-Para la versión real se cambian esos archivos y las pantallas siguen iguales.
+`js/AppOptimizer.js` se carga en el `<head>` y detecta si se entra desde un
+**celular**, una **tablet** o una **computadora** (puntero grueso/fino, puntos
+táctiles, tamaño de pantalla y agente; no solo el User-Agent). Marca el
+documento con la clase `celular`, `tablet` o `computadora` antes de pintar, y
+la cambia si se gira el dispositivo o se redimensiona la ventana.
 
-| Funcionalidad futura | Dónde se conecta |
+Con la clase, `css/movil.css` apaga lo que cuesta caro en táctil: el líquido
+animado con desenfoque, el `backdrop-filter` de cada tarjeta y las sombras
+abiertas. En `computadora` no cambia nada. También respeta
+`prefers-reduced-motion`.
+
+El mismo archivo expone `window.CamelloOpt`, que es lo que usa la app para no
+trabarse:
+
+| Utilidad | Para qué |
 |---|---|
-| **Servidor y base de datos** | `services/auth.js`, `services/pedidos.js`, `services/trabajadores.js` (mismas funciones, ahora con `fetch` a la API). `config.js → FUENTE_DATOS`. |
-| **Cuenta de trabajador** | `services/pedidos.js → estadoDe()`: hoy calcula el estado con temporizadores; mañana lo devuelve el servidor cuando el maestro lo cambia desde su app. Los estados ya están definidos en `ESTADOS`. |
-| **Pagos reales** | `services/pagos.js → pagar()` y `services/billetera.js` (registrar la tarjeta en la pasarela y guardar solo el token): Wompi, Mercado Pago o Stripe. |
-| **Cupones y referidos** | `services/cupones.js`: hoy el catálogo está en el código; en producción lo administra el servidor. |
-| **Mapa en tiempo real** | `ui/mapa.js`: reemplazar el dibujo por Leaflet, Mapbox o Google Maps manteniendo `mapaSimulado()` y `actualizarMapa()`. |
-| **Chat y llamadas** | `services/chat.js` (hoy responde con mensajes automáticos) y el botón de llamar en `screens/seguimiento.js`. |
-| **Fotos de maestros** | `ui/componentes.js → avatar()`: hoy usa iniciales; agregar `foto` al trabajador y pintarla ahí. |
+| `debounce` | La búsqueda espera 280 ms (120 en computadora) antes de consultar |
+| `carril` | Una búsqueda vieja no pisa a la nueva cuando se sigue escribiendo |
+| `cachear` / `olvidar` | La misma consulta no se repite y los datos se reusan |
+| `pintarSiCambia` | Solo se toca el DOM cuando el contenido cambió de verdad |
+| `conEsqueleto` | El esqueleto sale solo si la carga tarda; no parpadea |
+| `config.pagina` | Listas paginadas: 8 en celular, 12 en tablet, 20 en computadora |
+| `config.vivoMs` | Cada cuánto se repinta lo que depende del tiempo |
+| `oculto` | Con la pestaña guardada no se consulta ni se repinta |
+| `imagenesPerezosas` | `loading="lazy"` y `decoding="async"` |
 
-## Seguridad
-
-| Protección | Cómo funciona |
-|---|---|
-| **Contraseñas** | Nunca se guardan. Se guarda una clave derivada con PBKDF2-SHA256 (210.000 iteraciones) y una sal única por usuario. Las cuentas con el formato viejo se actualizan solas al entrar. |
-| **Contraseñas débiles** | Mínimo 8 caracteres con letras y números; se rechazan las más comunes, las secuencias (1234, abcd) y las que contienen el nombre o el correo. |
-| **Intentos fallidos** | Tras 5 intentos de inicio de sesión o de cupón incorrectos, se bloquea 5 minutos. El mensaje es el mismo exista o no la cuenta, para no revelar qué correos están registrados. |
-| **Sesión** | Vence a los 30 días sin uso. Si se cierra en una pestaña, se cierra en todas. |
-| **Acciones delicadas** | Eliminar la cuenta pide la contraseña. |
-| **XSS** | Todo texto escrito por el usuario se escapa antes de mostrarse; los avisos usan `textContent`. |
-| **Política de contenido (CSP)** | Solo se ejecuta código del propio sitio: sin scripts externos ni en línea, sin `object`, sin cambiar `base` ni enviar formularios a otros sitios. |
-| **Clickjacking** | La app se niega a abrirse dentro de un marco de otra página. |
-| **Pagos** | De una tarjeta solo se guardan la franquicia y los últimos 4 números; el CVV nunca se guarda. |
-| **Chat y llamadas** | Pensados para que el maestro no vea el número del cliente. |
-| **Service worker** | Solo guarda en caché respuestas correctas del propio sitio. |
-| **Seguridad física** | Código de 4 números por servicio, contactos de confianza, botón de emergencia (123) y reporte de problemas. |
-
-**Límites de un demo sin servidor:** los datos viven en el navegador del usuario, así que
-quien tenga acceso al teléfono desbloqueado podría verlos. En la versión real:
-
-- Autenticación en el servidor (hash con Argon2 o bcrypt, tokens de corta duración, verificación del correo y del celular).
-- Encabezados HTTP de seguridad desde el servidor (`Strict-Transport-Security`, `X-Frame-Options`/`frame-ancestors`, `X-Content-Type-Options`), que GitHub Pages no permite configurar.
-- Pagos solo a través de la pasarela (tokenización, sin datos de tarjeta en nuestros servidores).
-- Límite de intentos y registro de actividad sospechosa en el servidor.
-- Verificación de identidad y antecedentes de los maestros.
-
-## Al publicar cambios
-
-Sube el número de `VERSION` en `sw.js` (por ejemplo `camello-v2`) para que quienes
-ya la instalaron reciban la versión nueva.
-
-## Prueba de carga (40 millones de personas)
-
-Camello no tiene servidor propio: cada teléfono ejecuta la app y guarda sus datos.
-Por eso lo único que recibe a todos a la vez es el hosting de los archivos.
-
-- Primera visita: 46 archivos, ~97 KB comprimidos por persona.
-- 40 millones de primeras visitas: ~3,6 TB y ~2.000 millones de solicitudes.
-- Visitas siguientes: 0 solicitudes, la app abre desde la copia guardada en el teléfono
-  (antes volvía a pedir los 46 archivos cada vez).
-- 20 navegadores entrando a la vez en local: 20/20 sin errores.
-- Teléfono con el almacenamiento lleno (6.500 pedidos): la app libera lo viejo,
-  guarda máximo 200 pedidos y el historial carga de a 20 (0,8 s).
-
-GitHub Pages tiene un límite suave de 100 GB al mes, así que a esta escala hay que
-pasar el hosting a Cloudflare Pages (ancho de banda y solicitudes estáticas sin límite
-en el plan gratis). Los archivos se suben tal cual, no hay que cambiar código.
-
-## App del maestro (misma app, misma base de datos)
-
-Camello es una sola app con dos tipos de cuenta. Al crear la cuenta se elige
-**Necesito un maestro** o **Soy maestro** (con oficio y años de experiencia).
-La página de descarga es la misma para los dos.
-
-**Solo personas reales**
-- No hay maestros, reseñas ni calificaciones de ejemplo. La lista del cliente muestra únicamente
-  maestros registrados y conectados. Un maestro sin calificaciones aparece como "Nuevo".
-- El chat no tiene respuestas automáticas: responde la persona.
-
-**Maestro**
-- Botón para conectarse o desconectarse. Si está conectado, aparece de primero en la
-  lista del cliente con la marca "En línea ahora".
-- Las solicitudes nuevas llegan al instante, con vibración. Puede aceptarlas o rechazarlas.
-- Pasos del trabajo: Aceptar → Salir hacia el cliente → Confirmar llegada con el código
-  de 4 números del cliente (5 intentos y bloqueo de 5 min) → Terminé el trabajo.
-- Mapa con la dirección del cliente, su propia ubicación y el botón "Cómo llegar" (Google Maps).
-- Historial con lo ganado, los servicios y las propinas.
-
-**Ubicación**
-- El cliente puede usar el GPS ("Usar mi ubicación actual"). Si no, se ubica un punto
-  aproximado según la dirección.
-- El maestro conectado comparte su GPS. El cliente lo ve moverse en el mapa en vivo.
-- El mapa usa calles reales de OpenStreetMap.
-
-**Chat**
-- El chat de cada pedido es el mismo para el cliente y el maestro. Los mensajes llegan
-  al instante, con un contador de mensajes sin leer.
-- Solo lo pueden abrir el cliente y el maestro de ese pedido. Máximo 300 caracteres por mensaje.
-
-**Base de datos**
-- Todo está en una sola base (`js/services/almacen.js`): `usuarios` (clientes y maestros),
-  `pedidos`, `chat:<pedido>` y `ubicacion:<maestro>`.
-- Hoy se guarda en el navegador. Para probar en un solo computador, abre la app en dos
-  pestañas (una de cliente y otra de maestro) y verás los cambios al instante.
-- Para que funcione entre teléfonos distintos, solo hay que cambiar `almacen.js` por una base
-  en la nube (Firebase o Supabase). Las funciones son las mismas.
-
-Pruebas: `pruebas/flujo_maestro.py` (pedido completo cliente ↔ maestro) y
-`pruebas/ataques_maestro.py` (permisos, chat, código de llegada).
-
-## Toda Colombia (versión 0.3.0)
-
-Camello funciona en 62 ciudades: todas las capitales de departamento y las ciudades
-grandes de cada área metropolitana (`js/data/ciudades.js`).
-
-- Al crear la cuenta, clientes y maestros eligen su ciudad.
-- Al pedir un servicio se elige la ciudad. Con "Usar mi ubicación actual" se pone sola.
-- El cliente solo ve a los maestros conectados de esa ciudad. La búsqueda se hace en el
-  servidor, filtrada por oficio y ciudad (con índice), y se refresca cada 15 s.
-- Para que funcione con miles de maestros en el país, cada teléfono recibe en vivo solo
-  los cambios de su ciudad. La ubicación del maestro se consulta solo del que viene en camino.
-- Las cuentas creadas antes sin ciudad: al maestro se le pide en su panel antes de
-  conectarse; al cliente, en el primer pedido.
-
-Cambio en la base de datos: `supabase/02_ciudades.sql` (ya aplicado).
-
-## Correcciones (versión 0.3.1)
-
-- **Maestros "fantasma":** un maestro conectado manda señal cada minuto mientras tiene la app
-  abierta. Si la cierra, a los 3 minutos deja de aparecer y el servidor no deja pedirle
-  (antes seguía "En línea" para siempre). La lista sigue lo que dice el servidor.
-- **Pagos:** se quitaron los cobros con tarjeta simulados (decía "Pago aprobado" sin cobrar nada
-  y pedía datos de la tarjeta). Ahora el cliente le paga directo al maestro, en efectivo o por
-  transferencia, y en la app queda registrado.
-- **Reportar un problema y soporte:** antes mostraban "te contactaremos" sin enviar nada. Ahora el
-  mensaje se guarda en la tabla `reportes` (Supabase → Table editor → reportes).
-- Se quitó el botón de llamar, que no hacía nada.
-- La política de privacidad decía que todo se guardaba solo en el teléfono: se corrigió.
-- El panel del maestro muestra el nombre del cliente apenas llega la solicitud.
-- Si el maestro tarda más de 3 minutos en responder, se le sugiere al cliente elegir otro.
-
-Pruebas: `pruebas/flujo_completo.py` recorre todo entre un cliente y un maestro en dos
-"celulares" distintos con `pruebas/servidor_simulado.py` (cuentas, tablas, funciones y tiempo real).
-Base de datos: `supabase/03_reportes_y_conexion.sql` (ya aplicado).
-
-## Buscador de ciudades (versión 0.3.2)
-
-La ciudad ya no se elige en una lista desplegable: al tocar el campo "Ciudad" se abre una
-pantalla de la app (`js/ui/selector-ciudad.js`) con un buscador.
-
-- Busca por nombre o por departamento, con o sin tildes y en mayúsculas o minúsculas
-  ("medellin", "MEDELLÍN", "valle", "candela").
-- Sin escribir nada muestra las 12 principales y luego todas de la A a la Z.
-- "Usar mi ubicación" elige la ciudad con el GPS.
-- Enter elige el primer resultado; Escape o la flecha cierran sin cambiar.
-- Se usa al crear la cuenta, al pedir un servicio y en el panel y la cuenta del maestro.
-
-## Menú de ciudades (versión 0.3.3)
-
-El selector de ciudad ahora es un menú lateral con el estilo del menú de WebZipe y los colores
-de Camello: entra desde la izquierda, tiene buscador arriba, los departamentos en mayúsculas
-(cada uno abre sus ciudades numeradas, como el submenú "Servicios" de WebZipe), "Ciudades
-principales" de primero y el botón "Usar mi ubicación" abajo. Se cierra con la X, tocando
-afuera o con Escape. Es el mismo para clientes y maestros.
-
-## Direcciones reales (versión 0.3.4)
-
-Antes, la dirección escrita no se buscaba: se inventaba un punto dentro de la ciudad a partir
-del texto, y por eso "Jardín Plaza" quedaba en cualquier parte. Ahora:
-
-- **Sugerencias mientras escribe** (`js/services/geocodificar.js`, Photon de OpenStreetMap):
-  lugares, centros comerciales, barrios y calles reales de la ciudad elegida, en toda Colombia.
-  Elegir una sugerencia deja el punto exacto.
-- **Confirmar en el mapa** (`js/ui/mapa-elegir.js`): si la persona escribe la dirección sin elegir
-  sugerencia, se busca (Nominatim) y se abre un mapa con el pin fijo en el centro para moverlo
-  hasta la puerta. Si no se encuentra, empieza en el centro de la ciudad. Nunca se inventa un punto.
-- **Nomenclatura colombiana:** "Calle 5 # 38-20" se lee como Calle 5 con Carrera 38 y se ubica la
-  cuadra buscando lugares registrados en esa misma cuadra (probado en Bogotá, Cali, Medellín,
-  Barranquilla y Bucaramanga). Entiende Cra, Cl, Av, Dg, Tv, letras (43A, 68B), bis y Sur.
-- Las sugerencias del mismo municipio van primero.
-- **GPS:** además del punto, escribe la dirección real ("Calle 16 100-20, Ciudad Jardín").
-- **Casa y Trabajo** se guardan con su punto. Las direcciones guardadas antes se confirman una
-  sola vez en el mapa.
-- Junto al campo aparece "Ubicada en el mapa · Ver o ajustar".
-
-## Respaldo de los buscadores (versión 0.3.6)
-
-Durante las pruebas, Photon (sugerencias) dejó de responder. Ahora:
-- Cada consulta tiene tiempo límite (Photon 4,5 s, Nominatim 7 s): la app nunca se queda "Buscando…".
-- Si Photon falla, se deja de usar 3 minutos y se sigue con Nominatim y el mapa.
-- La dirección del GPS usa Nominatim si Photon no responde.
-- Si no hay sugerencias, el campo explica que la dirección se confirmará en el mapa.
-
-## Municipio correcto con el GPS (versión 0.3.7)
-
-Antes, con el GPS se elegía la ciudad cuyo centro estuviera más cerca, y eso fallaba en las
-orillas: Bosa y Usme (Bogotá) quedaban en Soacha y Pance (Cali) en Jamundí. Ahora se le pregunta
-al mapa en qué municipio está el punto (`ciudadDePunto`) y se reconoce cómo lo escribe el mapa
-("Bogotá D.C.", "Santiago de Cali", "Cartagena de Indias", "San José de Cúcuta"…). Si el mapa
-no responde, se usa la más cercana. Las sugerencias de dirección también usan el municipio que
-dice el mapa.
-
-### Verificación de ubicaciones (servicio real, 17 de noviembre)
-- 63 de 63 centros de ciudad caen en su municipio.
-- 17 de 19 lugares conocidos a menos de 320 m (la mayoría a menos de 100 m). Parque Lleras y
-  Torre del Reloj de Cartagena no están con ese nombre en el mapa: se marcan en el mapa.
-- 6 de 6 direcciones con nomenclatura quedan sobre la calle correcta.
-- 19 de 19 puntos GPS de prueba dan la ciudad correcta, y los de fuera de Colombia, ninguna.
-
-## Lugares con otro nombre en el mapa (versión 0.3.8)
-
-Si un lugar no aparece con el nombre completo (por ejemplo "Torre del Reloj", que en el mapa está como "Puerta del Reloj"), se busca otra vez solo con las palabras que lo identifican, sin "torre", "parque", "plaza" y similares, siempre dentro de la ciudad elegida. Ese resultado se toma como zona aproximada y el cliente lo confirma en el mapa antes de pedir. Las consultas a Nominatim van espaciadas un segundo, como pide su política de uso.
+La app de prueba tampoco sale a internet: las direcciones se confirman en el
+mapa dibujado y el mapa de seguimiento no descarga teselas de OpenStreetMap.

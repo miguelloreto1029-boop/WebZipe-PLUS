@@ -1,0 +1,194 @@
+/* ============================================================
+   CAMELLO · movil.css — optimización automática del dispositivo.
+   js/AppOptimizer.js marca el documento con `celular`, `tablet` o
+   `computadora` antes de pintar; aquí se apaga lo que cuesta caro en
+   pantallas táctiles. En `computadora` no cambia nada.
+   ============================================================ */
+
+/* 1 · El «líquido» del cristal eran dos capas fijas con desenfoque que se
+      repintaban en cada fotograma: lo más caro de la app en un teléfono.
+      En táctil se dejan quietas y sin desenfoque. */
+html.celular .app::before,
+html.celular body::before,
+html.tablet .app::before,
+html.tablet body::before {
+  animation: none !important;
+  filter: none !important;
+  opacity: 0.5;
+}
+
+/* 2 · `backdrop-filter` obliga a dibujar fuera de pantalla por cada tarjeta.
+      En táctil se quita y se sube un poco el fondo para no perder lectura. */
+html.celular .tarjeta,
+html.celular .opcion-caja,
+html.celular .chip,
+html.celular .desglose,
+html.celular .sugerencias,
+html.celular .dialogo-caja,
+html.celular .menu,
+html.celular .recibo,
+html.celular .bolsillo-item,
+html.celular .bolsillo-dato,
+html.celular .cupon,
+html.celular .trabajador,
+html.celular .fila-opcion,
+html.celular .pedido-item,
+html.celular .resena,
+html.celular .promocion,
+html.celular .tipo-cuenta,
+html.celular .lugares,
+html.celular .direcciones,
+html.celular .seguridad-lista,
+html.celular .confianza,
+html.celular .barra,
+html.celular .nav,
+html.celular .ubicacion-chip,
+html.celular .avatar-boton,
+html.celular .hoja-inicio,
+html.celular .buscador,
+html.celular .categoria,
+html.celular .lugar-rapido,
+html.celular .lugar-ico,
+html.celular .cat-ico,
+html.celular .menu-fila,
+html.celular .cajon-panel,
+html.celular .cajon-ciudad,
+html.celular .cajon-item,
+html.celular .selector-opcion,
+html.celular .pin-caja,
+html.celular .pin-entrada,
+html.celular .elegir-cabeza,
+html.celular .elegir-pie,
+html.celular .activo-aviso,
+html.celular .chat-form,
+html.celular .msg.mio .burbuja,
+html.celular .tema-boton,
+html.tablet .tarjeta,
+html.tablet .opcion-caja,
+html.tablet .chip,
+html.tablet .desglose,
+html.tablet .sugerencias,
+html.tablet .dialogo-caja,
+html.tablet .menu,
+html.tablet .recibo,
+html.tablet .bolsillo-item,
+html.tablet .bolsillo-dato,
+html.tablet .cupon,
+html.tablet .trabajador,
+html.tablet .fila-opcion,
+html.tablet .pedido-item,
+html.tablet .resena,
+html.tablet .promocion,
+html.tablet .tipo-cuenta,
+html.tablet .lugares,
+html.tablet .direcciones,
+html.tablet .seguridad-lista,
+html.tablet .confianza,
+html.tablet .barra,
+html.tablet .nav,
+html.tablet .ubicacion-chip,
+html.tablet .avatar-boton,
+html.tablet .hoja-inicio,
+html.tablet .buscador,
+html.tablet .categoria,
+html.tablet .lugar-rapido,
+html.tablet .lugar-ico,
+html.tablet .cat-ico,
+html.tablet .menu-fila,
+html.tablet .cajon-panel,
+html.tablet .cajon-ciudad,
+html.tablet .cajon-item,
+html.tablet .selector-opcion,
+html.tablet .pin-caja,
+html.tablet .pin-entrada,
+html.tablet .elegir-cabeza,
+html.tablet .elegir-pie,
+html.tablet .activo-aviso,
+html.tablet .chat-form,
+html.tablet .tema-boton {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 3 · Sombras muy abiertas: en el celular se recortan y en la tablet se
+      bajan, que es donde más cuestan. */
+html.celular .app,
+html.celular .dialogo-caja,
+html.celular .bolsillo-heroe,
+html.celular .categoria,
+html.celular .tema-boton {
+  box-shadow: none !important;
+}
+html.tablet .dialogo-caja,
+html.tablet .bolsillo-heroe {
+  box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* 4 · Movimiento más corto en táctil: la entrada de las secciones no espera. */
+html.celular .app.entra > * {
+  animation-duration: 0.14s !important;
+  animation-delay: calc(var(--i, 0) * 14ms) !important;
+}
+html.celular .bienvenida::before,
+html.celular .bienvenida::after {
+  animation: none !important;
+}
+html.celular .sk::after,
+html.tablet .sk::after {
+  animation-duration: 1.7s;
+}
+
+/* 5 · Respuesta táctil inmediata: sin la capa gris al tocar y sin el retardo
+      del doble toque. */
+html.celular *,
+html.tablet * {
+  -webkit-tap-highlight-color: transparent;
+}
+html.celular .nav-item,
+html.celular .tema-boton,
+html.celular .chip,
+html.celular .categoria,
+html.celular .lugar-rapido,
+html.celular .btn,
+html.tablet .nav-item,
+html.tablet .tema-boton,
+html.tablet .chip,
+html.tablet .categoria,
+html.tablet .btn {
+  touch-action: manipulation;
+}
+
+/* 6 · Blancos táctiles: nada de botones chicos ni de scroll horizontal.
+      env() respeta el área segura del teléfono. */
+html.celular .btn,
+html.celular .chip,
+html.celular .nav-item {
+  min-height: 44px;
+}
+html.celular .nav {
+  padding-bottom: calc(var(--abajo) + env(safe-area-inset-bottom, 0px));
+}
+html.celular .pie-fijo {
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+}
+html.celular input,
+html.tablet input {
+  font-size: 16px; /* que el navegador no haga zoom al enfocar */
+}
+
+/* 7 · Quien pidió poco movimiento lo recibe: se apagan las animaciones
+      decorativas, no las que explican el estado. */
+@media (prefers-reduced-motion: reduce) {
+  html.celular *,
+  html.tablet *,
+  html.computadora * {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+  }
+  html.celular .pulso,
+  html.tablet .pulso {
+    animation: none !important;
+  }
+}

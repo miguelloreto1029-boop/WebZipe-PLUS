@@ -866,6 +866,16 @@ button.barra-btn:active {
   display: grid;
   gap: 10px;
 }
+/* Fila del botón "Ver más" de las listas paginadas */
+.ver-mas {
+  display: block;
+  padding-top: 4px;
+}
+.chat-mensajes .ver-mas {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
 .trabajador {
   display: grid;
   grid-template-columns: auto 1fr auto;

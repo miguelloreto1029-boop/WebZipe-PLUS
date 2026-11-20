@@ -182,7 +182,10 @@ export function pantallaMaestro(raiz) {
   const dejar = pedidos.escuchar(pintar);
   // Cuando llega el nombre de un cliente nuevo se vuelve a pintar
   const dejarUsuarios = almacen.escuchar('usuarios', pintar);
-  const reloj = setInterval(pintar, 15000);
+  const reloj = setInterval(() => {
+    if (window.CamelloOpt.oculto()) return;
+    pintar();
+  }, window.CamelloOpt.config.vivoMs);
   return () => {
     dejar();
     dejarUsuarios();
@@ -352,7 +355,10 @@ export function pantallaTrabajoMaestro(raiz, { id }) {
   pintar();
   const dejar = pedidos.escuchar(pintar);
   const dejarChat = chat.escuchar(id, pintar);
-  const reloj = setInterval(pintar, 2000);
+  const reloj = setInterval(() => {
+    if (window.CamelloOpt.oculto()) return;
+    pintar();
+  }, window.CamelloOpt.config.vivoMs);
   return () => {
     dejar();
     dejarChat();

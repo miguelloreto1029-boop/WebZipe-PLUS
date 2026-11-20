@@ -112,15 +112,19 @@ export function activarDireccion(raiz, { ciudad = () => '', punto = null, alCamb
     if (texto.length < 3) return cerrarLista();
     espera = setTimeout(async () => {
       consulta = new AbortController();
+      const ciudadId = ciudad();
+      const clave = `dir:${ciudadId}:${texto}`;
       try {
-        sugerencias = await sugerir(texto, ciudad(), { signal: consulta.signal });
+        // La misma dirección no se vuelve a preguntar en 8 s
+        sugerencias = await window.CamelloOpt.cachear(clave, () => sugerir(texto, ciudadId, { signal: consulta.signal }), 8000);
         marcada = -1;
         if (document.activeElement === input) pintarLista();
       } catch (e) {
+        window.CamelloOpt.olvidar(clave);
         // Si el buscador no responde se sigue igual: al continuar se confirma en el mapa
         if (e.name !== 'AbortError' || !consulta.signal.aborted) avisoSinSugerencias();
       }
-    }, 300);
+    }, window.CamelloOpt.config.debounce);
   });
 
   input.addEventListener('keydown', (e) => {

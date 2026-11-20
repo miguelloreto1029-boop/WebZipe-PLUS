@@ -128,22 +128,36 @@ export async function pantallaBilletera(raiz) {
     })
   );
 
-  raiz.querySelector('#pagos').innerHTML = pagos.length
-    ? pagos
-        .slice()
-        .sort((a, b) => b.pago.fecha - a.pago.fecha)
-        .map((p, i) => {
-          const c = categoriaPorId(p.categoria);
-          return `
+  const ulPagos = raiz.querySelector('#pagos');
+  const ordenados = pagos.slice().sort((a, b) => b.pago.fecha - a.pago.fecha);
+  const opt = window.CamelloOpt;
+  // Actividad paginada: no se vuelcan todos los recibos de una sola vez
+  let mostrados = opt.config.pagina;
+  const pintarPagos = () => {
+    const visibles = ordenados.slice(0, mostrados);
+    ulPagos.innerHTML = visibles.length
+      ? visibles
+          .map((p, i) => {
+            const c = categoriaPorId(p.categoria);
+            return `
           <a class="bolsillo-item rev" style="--i:${i}" href="#/recibo/${p.id}">
             <span class="promo-ico">${icono('recibo', { tamano: 20 })}</span>
             <span class="fila-texto"><b>${esc(c.nombreCorto || c.nombre)}</b><time>${esc(fechaHora(p.pago.fecha))} · ${esc(p.pago.metodoNombre)}</time></span>
             <span class="por">${icono('check', { tamano: 12 })} Pagado</span>
             <span class="monto">${dinero(p.pago.total)}</span>
           </a>`;
-        })
-        .join('')
-    : '<p class="bolsillo-vacio">Aquí verás los recibos de tus servicios.<br>Cuando pagues un camello, el comprobante aparece en esta lista.</p>';
+          })
+          .join('') +
+        (mostrados < ordenados.length
+          ? `<li class="ver-mas"><button class="btn btn-secundario btn-bloque">Ver más pagos (${ordenados.length - mostrados})</button></li>`
+          : '')
+      : '<p class="bolsillo-vacio">Aquí verás los recibos de tus servicios.<br>Cuando pagues un camello, el comprobante aparece en esta lista.</p>';
+    ulPagos.querySelector('.ver-mas button')?.addEventListener('click', () => {
+      mostrados += opt.config.pagina;
+      pintarPagos();
+    });
+  };
+  pintarPagos();
 }
 
 export function pantallaAgregarMetodo(raiz) {

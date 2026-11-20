@@ -193,7 +193,11 @@ export const sincronizar = {
       }
     };
     traer();
-    const reloj = setInterval(traer, 8000);
+    // Con la pestaña guardada no se consulta: ya se retomará al volver
+    const reloj = setInterval(() => {
+      if (window.CamelloOpt && window.CamelloOpt.oculto()) return;
+      traer();
+    }, 8000);
     return () => {
       activo = false;
       clearInterval(reloj);

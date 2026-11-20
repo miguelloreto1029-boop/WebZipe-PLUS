@@ -49,7 +49,17 @@ export function etapaDe(pedido, ahora = Date.now()) {
 
 export const sePuedeCancelar = (pedido) => ['buscando', 'aceptado'].includes(estadoDe(pedido).id);
 
-const todos = () => almacen.leer(CLAVE, []);
+const todos = () => {
+  // La copia de los pedidos se lee una vez cada 300 ms: el aviso de pedido
+  // activo lo consulta a cada rato y volver a interpretar el JSON cada vez
+  // era trabajo tirado en el teléfono.
+  const opt = window.CamelloOpt;
+  if (!opt) return almacen.leer(CLAVE, []);
+  return opt.cachear('pedidos', () => {
+    const lista = almacen.leer(CLAVE, []);
+    return Array.isArray(lista) ? lista : [];
+  }, 300);
+};
 
 const ponerEnCopia = (datos) => sincronizar.ponerPedido(datos);
 

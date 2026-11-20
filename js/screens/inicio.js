@@ -8,7 +8,7 @@ import { pedidos, etapaDe } from '../services/pedidos.js';
 import { cupones } from '../services/cupones.js';
 import { sesion, borrador } from '../estado.js';
 import { ir } from '../router.js';
-import { navInferior, iconoCategoria } from '../ui/componentes.js';
+import { navInferior, iconoCategoria, esqueletoTarjetas } from '../ui/componentes.js';
 import { montarPedidoActivo } from '../ui/pedido-activo.js';
 import { mapaFondo } from '../ui/mapa.js';
 import { icono } from '../ui/iconos.js';
@@ -133,16 +133,22 @@ export async function pantallaInicio(raiz) {
     })
   );
 
-  // Buscador: sugiere la categoría según lo que se escribe
+  // Buscador: sugiere la categoría según lo que se escribe. Va con un retardo
+  // corto (280 ms en el teléfono) y una búsqueda vieja no pisa a la nueva.
   const q = raiz.querySelector('#q');
   const caja = raiz.querySelector('#sugerencias');
-  q.addEventListener('input', () => {
+  const opt = window.CamelloOpt;
+  let carril = opt.carril();
+
+  const pintarSugerencias = () => {
+    if (!carril.valido()) return;
     const texto = q.value.trim();
     if (texto.length < 2) {
       caja.hidden = true;
       return;
     }
-    const res = buscarCategorias(texto);
+    const res = opt.cachear('buscar:' + texto, () => buscarCategorias(texto), 5000);
+    if (!carril.valido()) return; // siguió escribiendo: manda lo nuevo
     caja.hidden = false;
     caja.innerHTML = res.length
       ? res
@@ -158,13 +164,24 @@ export async function pantallaInicio(raiz) {
           .join('')
       : `<p class="sin-resultados">No encontramos "${esc(texto)}". Elige uno de los servicios de abajo.</p>`;
     caja.querySelectorAll('[data-cat]').forEach((b) => b.addEventListener('click', () => elegir(b.dataset.cat)));
+  };
+
+  const buscar = opt.debounce(pintarSugerencias, opt.config.debounce);
+  q.addEventListener('input', () => {
+    carril.cerrar();
+    carril = opt.carril();
+    buscar();
   });
   q.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') caja.querySelector('[data-cat]')?.click();
   });
 
   // Volver a pedir: últimos servicios terminados, sin repetir categoría
-  pedidos.delUsuario(u.id).then((lista) => {
+  const cajaRecientes = raiz.querySelector('#recientes');
+  const promesaRecientes = pedidos.delUsuario(u.id);
+  // El esqueleto solo sale si tarda: con los datos a la mano no parpadea
+  opt.conEsqueleto(cajaRecientes, esqueletoTarjetas(1), promesaRecientes);
+  promesaRecientes.then((lista) => {
     const caja = raiz.querySelector('#recientes');
     if (!caja) return;
     const vistos = new Set();
