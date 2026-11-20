@@ -1,0 +1,85 @@
+/**
+ * Enrutador por hash (#/ruta). Funciona en cualquier hosting estático,
+ * incluido GitHub Pages, sin configurar el servidor.
+ */
+
+const rutas = [];
+let limpiarActual = null;
+
+/**
+ * Registra una ruta.
+ * patron: '/pedido/:id'
+ * pantalla: async (raiz, params) => (opcional) función de limpieza
+ * opciones.publica: true si no requiere sesión
+ * opciones.soloApp: true si solo se puede usar con la app instalada
+ * opciones.rol: 'cliente' o 'trabajador' si la pantalla es solo de ese tipo de cuenta
+ */
+export function ruta(patron, pantalla, opciones = {}) {
+  const claves = [];
+  const regex = new RegExp(
+    '^' +
+      patron.replace(/:(\w+)/g, (_, k) => {
+        claves.push(k);
+        return '([^/]+)';
+      }) +
+      '$'
+  );
+  rutas.push({ regex, claves, pantalla, ...opciones });
+}
+
+export const ir = (destino, { reemplazar = false } = {}) => {
+  const hash = '#' + destino;
+  if (reemplazar) location.replace(hash);
+  else location.hash = hash;
+};
+
+// Cuántas pantallas se han visto en esta sesión: si es la primera, "atrás" va al respaldo
+let vistas = 0;
+
+export const atras = (respaldo = '/inicio') => {
+  if (vistas > 1) history.back();
+  else ir(respaldo, { reemplazar: true });
+};
+
+export function iniciarRouter({ raiz, haySesion, rolActual = () => 'cliente', appInstalada = () => true, inicioPublico, inicioPrivado }) {
+  const privado = () => (typeof inicioPrivado === 'function' ? inicioPrivado() : inicioPrivado);
+  async function resolver() {
+    const inicioPrivado = privado();
+    const camino = location.hash.slice(1) || (haySesion() ? inicioPrivado : inicioPublico);
+
+    let encontrada = null;
+    let params = {};
+    for (const r of rutas) {
+      const m = camino.match(r.regex);
+      if (m) {
+        encontrada = r;
+        r.claves.forEach((k, i) => (params[k] = decodeURIComponent(m[i + 1])));
+        break;
+      }
+    }
+
+    if (!encontrada) return ir(haySesion() ? inicioPrivado : inicioPublico, { reemplazar: true });
+    if (!encontrada.publica && !haySesion()) return ir(inicioPublico, { reemplazar: true });
+    if (encontrada.soloSinSesion && haySesion()) return ir(inicioPrivado, { reemplazar: true });
+    if (encontrada.soloApp && !appInstalada()) return ir(inicioPublico, { reemplazar: true });
+    if (encontrada.rol && haySesion() && encontrada.rol !== rolActual()) return ir(encontrada.otroRol || inicioPrivado, { reemplazar: true });
+
+    vistas++;
+    if (typeof limpiarActual === 'function') limpiarActual();
+    limpiarActual = null;
+
+    raiz.classList.remove('entra');
+    void raiz.offsetWidth; // reinicia la animación de entrada
+    raiz.classList.add('entra');
+    window.scrollTo(0, 0);
+
+    limpiarActual = await encontrada.pantalla(raiz, params);
+    // Movimiento: orden de entrada de los bloques directos y de los .rev
+    [...raiz.children].forEach((e, i) => e.style.setProperty('--i', String(i)));
+    raiz.querySelectorAll('.rev').forEach((e, i) => e.style.setProperty('--i', String(i)));
+    raiz.querySelector('h1')?.focus({ preventScroll: true });
+  }
+
+  window.addEventListener('hashchange', resolver);
+  resolver();
+}
