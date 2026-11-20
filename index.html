@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cut">
+  <title>Camello · App de prueba (cristal, brutal y bento)</title>
+  <meta name="description" content="Camello: tres interfaces de prueba en una sola app. Cambia entre cristal, brutal y bento con un botón.">
+  <meta name="theme-color" content="#f5efe8">
+  <!-- Seguridad: solo se cargan recursos del propio sitio; nada de scripts externos ni en línea -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://sqjjxpxbqtwsejgjfojq.supabase.co wss://sqjjxpxbqtwsejgjfojq.supabase.co https://photon.komoot.io https://nominatim.openstreetmap.org; font-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/camello.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icono-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Camello">
+  <link rel="stylesheet" href="css/app.css?v=27">
+  <link rel="stylesheet" href="css/motion.css?v=5">
+  <!-- Las tres identidades. Solo queda activa la elegida; las otras llevan
+       disabled desde el HTML y el script de abajo la cambia sin recargar. -->
+  <link id="tema-cristal" rel="stylesheet" href="css/cristal.css?v=6">
+  <link id="tema-brutal" rel="stylesheet" href="css/brutal.css?v=4" disabled>
+  <link id="tema-bento" rel="stylesheet" href="css/bento.css?v=3" disabled>
+  <link rel="stylesheet" href="css/interruptor.css?v=1">
+  <!-- Deja activa la hoja de identidad guardada antes de pintar (ver js/tema.js) -->
+  <script src="js/tema.js?v=2"></script>
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Se ve solo mientras carga el JavaScript -->
+    <div id="arranque" class="arranque" aria-label="Cargando">
+      <span class="girador grande"></span>
+    </div>
+  </div>
+  <noscript>
+    <p class="sin-js">Camello necesita JavaScript para funcionar. Actívalo en tu navegador.</p>
+  </noscript>
+  <script type="module" src="js/main.js?v=27"></script>
+</body>
+</html>
